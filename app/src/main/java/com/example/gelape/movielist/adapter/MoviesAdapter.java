@@ -25,12 +25,9 @@ import com.squareup.picasso.Picasso;
 
 public class MoviesAdapter extends RecyclerView.Adapter <MoviesAdapter.MovieViewHolder>
 {
-
     private List<Movie> movies;
     private int rowLayout;
     private Context context;
-    private static ImageView moviePoster;
-
 
     public static class MovieViewHolder extends RecyclerView.ViewHolder
     {
@@ -40,7 +37,7 @@ public class MoviesAdapter extends RecyclerView.Adapter <MoviesAdapter.MovieView
         TextView data;
         TextView movieDescription;
         TextView rating;
-
+        ImageView moviePoster;
 
         public MovieViewHolder(View v)
         {
@@ -68,14 +65,12 @@ public class MoviesAdapter extends RecyclerView.Adapter <MoviesAdapter.MovieView
         return new MovieViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder (final MovieViewHolder holder, final int position)
     {
         String posterUrl = "http://image.tmdb.org/t/p/w185/"+movies.get(position).getPosterPath();
-        //Bitmap bmp = BitmapFactory.decodeFile(String.valueOf(new java.net.URL(posterUrl).openStream()));
-        //Picasso.with(context).load(posterUrl).into(moviePoster);
-        //holder.moviePoster.setImageBitmap(bmp);
+        Picasso.with(context).cancelRequest(holder.moviePoster);
+        Picasso.with(context).load(posterUrl).into(holder.moviePoster);
         holder.movieTitle.setText(movies.get(position).getTitle());
         holder.data.setText(movies.get(position).getReleaseDate());
         holder.movieDescription.setText(movies.get(position).getOverview());
