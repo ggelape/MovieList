@@ -1,8 +1,10 @@
 package com.example.gelape.movielist.model;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 
-public class Movie
+
+public class Movie implements Serializable
 {
     @SerializedName("poster_path")
     private String posterPath;
