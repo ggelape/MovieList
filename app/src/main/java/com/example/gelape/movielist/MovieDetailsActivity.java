@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.gelape.movielist.database.DbController;
 import com.squareup.picasso.Picasso;
 
 public class MovieDetailsActivity extends AppCompatActivity
@@ -23,10 +24,10 @@ public class MovieDetailsActivity extends AppCompatActivity
 
         Bundle bundle = getIntent().getExtras();
         String posterUrl = bundle.getString("posterUrl2");
-        String movieTitleS = bundle.getString("movieTitleS");
-        String dataS = bundle.getString("dataS");
-        String movieDescriptionS = bundle.getString("movieDescriptionS");
-        String ratingI = bundle.getString("ratingI");
+        final String movieTitleS = bundle.getString("movieTitleS");
+        final String dataS = bundle.getString("dataS");
+        final String movieDescriptionS = bundle.getString("movieDescriptionS");
+        final String ratingI = bundle.getString("ratingI");
 
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
         collapsingToolbarLayout.setTitle(movieTitleS);
@@ -50,6 +51,9 @@ public class MovieDetailsActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
+                DbController crud = new DbController(getBaseContext());
+                String result;
+                result = crud.insertData(movieTitleS, ratingI, dataS, movieDescriptionS);
                 Snackbar.make(view, "Filme salvo com sucesso! ", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             }
         });

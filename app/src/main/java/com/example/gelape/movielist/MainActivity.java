@@ -2,6 +2,7 @@ package com.example.gelape.movielist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,15 +37,23 @@ public class MainActivity extends AppCompatActivity
     private final static String API_KEY = "e1c08c9ea4fe1c84e6eefc727128b6b5";
     ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
     ListView listView;
-    Response<MovieResponse> response;
-    Intent intent;
-    MoviesAdapter moviesAdapter;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
+        MenuItem movieItem = menu.findItem(R.id.movies_saved);
+        movieItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
+        {
+            @Override
+            public boolean onMenuItemClick(MenuItem item)
+            {
+                Intent intent = new Intent(getApplicationContext(), SavedMoviesActivity.class);
+                getApplicationContext().startActivity(intent);
+                return false;
+            }
+        });
         final MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
@@ -65,7 +74,6 @@ public class MainActivity extends AppCompatActivity
                     {
                         int statusCode = response.code();
                         List<Movie> movies = response.body().getResults();
-                        //listView.setAdapter(new MoviesAdapter(movies, R.layout.list_item_movie, getApplicationContext()));
                         MoviesAdapter adapter = new MoviesAdapter(getApplicationContext(), R.layout.list_item_movie, movies);
                         listView.setAdapter(adapter);
                     }
@@ -99,9 +107,7 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "Please obtain your API KEY first from themoviedb.org", Toast.LENGTH_LONG).show();
             return;
         }
-
         listView = (ListView) findViewById(R.id.listView);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Call<MovieResponse> call = apiService.getTopRatedMovies(API_KEY);
         call.enqueue(new Callback<MovieResponse>()
@@ -111,7 +117,6 @@ public class MainActivity extends AppCompatActivity
             {
                 int statusCode = response.code();
                 final List<Movie> movies = response.body().getResults();
-                //recyclerView.setAdapter(moviesAdapter = new MoviesAdapter(movies, R.layout.list_item_movie, getApplicationContext()));
                 MoviesAdapter adapter = new MoviesAdapter(getApplicationContext(), R.layout.list_item_movie, movies);
                 listView.setAdapter(adapter);
             }
