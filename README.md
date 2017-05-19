@@ -3,7 +3,7 @@
 
 ## Screen-record
 
-![screenRecord]()
+![screenRecord](http://i.imgur.com/KYnzQNQ.gif)
 
 
 # Features: 
